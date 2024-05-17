@@ -22,9 +22,16 @@ typedef struct t_comestibles{
 ## declaracion de la funcion 
 
 ```C
-int ft_simpilla(t_ghost ghost, t_player player)
-
+int ft_simpilla(ghost ghost, player player, map mapaa)
+{
+    if(ghost.x == mapaa.map && player.x == mapaa.map 
+        || ghost.y == mapaa.map && player.y == mapaa.map)
+        return 1;
+    else
+        return 0;
+}
 ```
+
 
 # ft_iwin
 ## funcionamiento
@@ -38,19 +45,52 @@ int ft_simpilla(t_ghost ghost, t_player player)
 ## declaracion de la funcion
 
 ```C
-int ft_iwin(t_player player, t_ghost ghost, t_comestibles comestibles)
+int ft_iwin(player player, ghost ghost, comestibles comestibles,dramap dramap)
+{
+
+    char line;
+
+    line = ft_buscexit(dramap , fd);
+    if (player.x == line)
+    {
+        printf("se acabo la partida llegaste al final");
+        return 1;
+    }
+    return 0;
+}
 ```
 
-# ft_sumpuntos
+# ft_buscexit
 ## funcionamiento
-- el plan que tengo para esta funcion es simple es que siempre que el jugador se encuentre con un comestible que sume puntos a contador
-- como es muy facil esta funcion la vamos a complicar un poco vamos a hacer que los comestibles salgan en posiciones seudo aleatorias  pero siempre dentro del mapa para ello utilizaremos gnl para ver en que posicion hay un 0 y con algun algoritmo de aletoridad que valla generando un comestible cada 2 segundos
-- debe retornar contador
+- esta función es para buscar la salida usando get_next_line
 # variables
-- comestibles
-- contador
-- tiempo
+- fd
+- drama.P
+- line
+- exit
+
+
 
 ```C
-int ft_sumpuntos(t_comestibles comestibles)
+char *ft_buscexit(dramap dramap, int fdd)
+{
+    char exitt;
+    char line;
+    fdd = open(fdd, O_RDONLY); 
+    dramap.P = 'P';
+    line = ft_get_next_line(fdd); 
+
+    while((line = ft_get_next_line(fdd)) != dramap.P) 
+    {
+        if (line = dramap.P)
+        {
+            return line;
+        }
+
+        free(line);
+        line = NULL; 
+    }
+
+    return NULL; 
+}
 ```

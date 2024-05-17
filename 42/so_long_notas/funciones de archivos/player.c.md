@@ -21,23 +21,24 @@ typedef struct t_player{
 - va a retornar el valor de mapa[x]  [y]
 ## declaracion funcion
 ```C
-int ft_moviplay(t_mapa map, t_keys key)
+int ft_moviplay(map *map, int x , int y)
+{
+    if (map->map[map->player.y + y][map->player.x +x] == '1')
+        return 0;
+    if (map->map[map->player.y + y][map->player.x +x] == 'E')
+        return 0;
+
+    if (map->map[map->player.y + y][map->player.x +x] == 'C')
+    {
+        map->comestibles--;
+        map->map[map->player.y + y][map->player.x + x] = '0';
+    }
+    map->map[map->player.y][map->player.x] = '0';
+    map->player.x += x;
+    map->player.y +=y;
+    map->map[map->player.y][map->player.x] = 'P';
+    return 1;
+}
 ```
 
-# ft_detewall
-## funcionamiento
-- va a aconsistir en que si la posicion de ft_moviplay (vaya mapa x y ) que si la x +1 == 1 (vaya pared) hacemos un return vacio para que no haga nada y asi igual con la y 
-## variables
-- mapa**
-- pared
-## retorno 
-```C
-return ;
-```
-
-## Declaracion de la funcion
-
-```C
-void ft_detewall(t_mapa map)
-```
 

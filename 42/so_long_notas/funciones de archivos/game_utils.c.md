@@ -1,22 +1,11 @@
 
 # numeros speudoaleatorios
 ```C
-static unsigned int counter = 0; // Simula un contador de tiempo
+int custom_rand() 
+{
+    unsigned int rand_seed;
 
-// Función para incrementar el contador (simulando el paso del tiempo)
-void increment_counter() {
-    counter++;
-}
-
-// Función para obtener el valor del contador (simulando obtener el tiempo actual)
-unsigned int custom_time() {
-    return counter;
-}
-
-// Generador de números pseudoaleatorios
-static unsigned int rand_seed = 123456789; // Semilla inicial
-
-int custom_rand() {
+    rand_seed = 123456789;
     rand_seed = rand_seed * 1103515245 + 12345;
     return (unsigned int)(rand_seed / 65536) % 32768;
 }
@@ -114,3 +103,33 @@ return (end - start) / frecuencia_cpu;
 
 }
 ```
+
+# ft_realloc
+
+```C
+void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
+{
+    void *new_ptr;
+    size_t min_size;
+
+    if (!ptr)
+        return malloc(new_size);
+    if (!new_size)
+    {
+        free(ptr);
+        return NULL;
+    }
+    new_ptr = malloc(new_size);
+    if (!new_ptr)
+        return NULL;
+    min_size = old_size < new_size ? old_size : new_size;
+    ft_bzero(new_ptr, new_size);
+    while (min_size--)
+    {
+        ((unsigned char *)new_ptr)[min_size] = ((unsigned char *)ptr)[min_size];
+    }
+    free(ptr);
+    return new_ptr;
+}
+```
+

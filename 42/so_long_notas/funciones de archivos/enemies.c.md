@@ -73,10 +73,26 @@ Coordinates ft_movighost(char **map, int x, int y) {
 devolera 1 si el player se come al fantasma y 0 si no
 ## declaracion funcion
 ```C
-int ft_sitpillo(t_player player, t_ghost ghost, t_comestibles , tiempo)
+int ft_sitpillo(player player, ghost ghost, comestibles comestibles ,double tiempo)
+{
+    ghost.posicion_inicial = ghostpositioni(fd, ghost);
+    if(comestibles.positions == player.position)
+    {
+        while(medir_tiempo(3))
+        {
+            if(player.position == ghost.position)
+            {
+                ghost.position = ghost.posicion_inicial;
+                return 1;
+            }
+            else
+                return 0;
+        }
+    }
+}
 ```
 
-# ft_spawm
+# ft_ghostpositioni
 ## funcionamiento
 si la funcion ft_sitpillo devuelve 1 entoces se ejecutara esta que consistira en reestablecer la posicion del fantasma a la inicial para ello igualaremos la variable posicion de las cordenadas a la posicion inicial
 # variables
@@ -85,9 +101,24 @@ si la funcion ft_sitpillo devuelve 1 entoces se ejecutara esta que consistira en
 - mapa**
 - cordenates
 # retorno 
-deve devover un char ** con la posicion x e y
+deve devover un char  con la posicion de C para hacer el respawm
 
 # declaracion funcion
 ```C
-char **ft_spwm(t_mapa map, t_ghost ghost, t_cordenates cordenates);
+char ghostpositioni(int fdd, ghost ghost)
+{
+    char y;
+    char *line;
+    fdd = open(fd, O_RDONLY);
+
+    line = ft_get_next_line(fd);
+
+    while(line = ft_get_next_line(fd) != 'C')
+    {
+        if(line == 'C')
+            return y;
+        free(line);
+    }
+    return line;
+}
 ```
