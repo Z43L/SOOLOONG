@@ -69,6 +69,20 @@ typedef struct t_comestibles{
     int count;
 }   comestibles ;
 
+typedef struct t_lienzo
+{
+    void *mlx;
+    void *mlx_win;
+    void *img;
+    int weight;
+    int height;
+    char *addr;
+    int bits_per_pixel;
+    int line_lenght;
+    map mapa;
+
+} lienzo;
+
 int ft_compx(int fdd);
 int ft_county(int fdd);
 int custom_rand();
