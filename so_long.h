@@ -7,69 +7,81 @@
 #include "lib/LIBFT/libft.h"
 #include "lib/minilibx-linux/mlx.h"
 #include "lib/FT_PRINTF/ft_printf.h"
-#define fd "mapa.bert"
+
 #define MAP_WIDTH 24
 #define MAP_HEIGHT 20
 
-typedef struct t_keys{
+typedef struct s_player player;
+typedef struct s_map map;
+typedef struct s_comestibles comestibles;
+typedef struct s_ghost ghost;
+typedef struct s_lienzo lienzo;
+typedef struct s_keys keys;
+typedef struct s_coodinates Coordinates;
+typedef struct s_drawmap dramap;
+
+
+struct t_keys
+    {
     char a;
     char s;
     char w;
     char d;
     char q;
-} keys;
+};
 
-typedef struct t_gosht{
+struct t_gosht{
     int x;
     int y;
     int vida;
-    map;
+    map *map;
     char  **posicion_inicial;
     Coordinates* position;
-}   ghost;
+};
 
-typedef struct t_coodinates{
+struct s_coodinates{
     int x;
     int y;
-} Coordinates;
+};
 
-typedef struct t_mapa{
+struct t_mapa{
     char **map;
     char *line;
     int   x;
     int   y;
-    player player;
-    ghost;
+    player *player;
+    ghost *ghost;
     comestibles *comestibles;
     int rows;
     int wall;
     Coordinates* position;
-} map;
+};
 
-typedef struct t_drawmap{
+struct t_drawmap{
     char P;
     char E;
     char C;
     int cero;
     int uno;
-}   dramap;
+};
 
 
-typedef struct t_player{
+struct t_player{
     int x;
     int y;
     int vida;
-    keys;
-    map;
+    keys* keys;
+    map* map;
     Coordinates* position;
-}   player;
+    int is_hunter;
+};
 
-typedef struct t_comestibles{
+ struct t_comestibles{
     Coordinates* positions;
     int count;
-}   comestibles ;
+};
 
-typedef struct t_lienzo
+struct t_lienzo
 {
     void *mlx;
     void *mlx_win;
@@ -79,9 +91,10 @@ typedef struct t_lienzo
     char *addr;
     int bits_per_pixel;
     int line_lenght;
-    map mapa;
+    map* map;
+    Coordinates* position;
 
-} lienzo;
+};
 
 int ft_compx(int fdd);
 int ft_county(int fdd);

@@ -39,7 +39,7 @@ char *ft_buscexit(dramap dramap, int fdd)
         }
         
         free(line);
-        line = NULL; 
+        line = NULL;
     }
     
     return NULL; 
