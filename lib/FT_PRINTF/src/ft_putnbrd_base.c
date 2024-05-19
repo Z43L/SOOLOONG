@@ -6,11 +6,11 @@
 /*   By: davmoren <davmoren@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:10:37 by davmoren          #+#    #+#             */
-/*   Updated: 2024/05/11 19:26:20 by davmoren         ###   ########.fr       */
+/*   Updated: 2024/05/19 23:15:15 by davmoren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include "../../LIBFT/libft.h"
 
 int	printnbr(long c, int len, bool tof, int base)
 {
