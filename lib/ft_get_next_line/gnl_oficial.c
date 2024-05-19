@@ -6,7 +6,7 @@
 /*   By: davmoren <davmoren@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 08:01:03 by davmoren          #+#    #+#             */
-/*   Updated: 2024/05/14 08:03:19 by davmoren         ###   ########.fr       */
+/*   Updated: 2024/05/19 23:25:28 by davmoren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*bulogic(int fd, char *storage, char *temp, char *buffer)
 	size_t	bytes_read;
 
 	bytes_read = 0;
-	while (!ft_strchr(storage, '\n'))
+	while (!ft_strchrg(storage, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read < 0)
@@ -31,7 +31,7 @@ char	*bulogic(int fd, char *storage, char *temp, char *buffer)
 		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
-		temp = ft_strjoin(storage, buffer);
+		temp = ft_strjoing(storage, buffer);
 		free(storage);
 		if (!temp)
 			return (NULL);
@@ -63,7 +63,7 @@ char	*extract_line(char *str)
 	if (str[i] == '\n')
 		i++;
 	line = malloc(i + 1);
-	line = ft_strncpy(line, str, i);
+	line = ft_strncpyg(line, str, i);
 	line[i++] = '\0';
 	return (line);
 }
@@ -87,12 +87,12 @@ char	*update(char *str)
 	int		i;
 
 	i = 0;
-	nextline = ft_strchr(str, '\n');
-	if (!nextline || !ft_strchr(str + 1, '\0'))
+	nextline = ft_strchrg(str, '\n');
+	if (!nextline || !ft_strchrg(str + 1, '\0'))
 	{
 		return (NULL);
 	}
-	updated_str = ft_strdup(nextline + 1);
+	updated_str = ft_strdupg(nextline + 1);
 	if (!updated_str)
 		return (NULL);
 	return (updated_str);
@@ -124,7 +124,7 @@ char	*ft_get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!storage)
-		storage = ft_strdup("");
+		storage = ft_strdupg("");
 	storage = bulogic(fd, storage, temp, buffer);
 	if (storage[0] == '\0')
 	{
@@ -139,7 +139,7 @@ char	*ft_get_next_line(int fd)
 	return (line);
 }
  
-int	main(void)
+/* int	main(void)
 {
 	int fd = open("prueba", O_RDONLY);
 	if (fd < 0)
@@ -158,4 +158,4 @@ int	main(void)
 	printf("%s", line);
 	close(fd);
 	return (0);
-}
+} */

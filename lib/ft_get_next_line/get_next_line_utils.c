@@ -6,7 +6,7 @@
 /*   By: davmoren <davmoren@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 08:01:10 by davmoren          #+#    #+#             */
-/*   Updated: 2024/05/14 08:12:56 by davmoren         ###   ########.fr       */
+/*   Updated: 2024/05/19 23:24:23 by davmoren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strdupg(const char *string)
 	size_t	i;
 	size_t	len;
 
-	len = ft_strlen(string);
+	len = ft_strleng(string);
 	duplicada = malloc(len);
 	if (duplicada == NULL)
 		return (NULL);
@@ -70,8 +70,8 @@ char	*ft_strjoing(char *s1, char *s2)
 	int		z;
 	char	*ptr;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
+	len1 = ft_strleng(s1);
+	len2 = ft_strleng(s2);
 	ptr = malloc(len1 + len2 + 1);
 	if (!ptr)
 		return (NULL);
