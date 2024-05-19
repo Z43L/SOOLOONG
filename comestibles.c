@@ -1,4 +1,5 @@
 #include "so_long.h"
+#include <unistd.h>
 void read_map(const char *filename, map map)
 {
     int fdd;
@@ -6,14 +7,14 @@ void read_map(const char *filename, map map)
     char buf[1];
 
     fdd = open(filename, O_RDONLY);
-    if (fd == -1) {
+    if (fdd == -1) {
         write(2, "Error opening file\n", 19);
         exit(EXIT_FAILURE);
     }
 
     i = 0;
     j = 0;
-    while (read(fd, buf, 1) > 0) {
+    while (read(fdd, buf, 1) > 0) {
         if (buf[0] == '0' || buf[0] == '1') {
             map.map[i][j++] = buf[0] - '0';
             if (j == MAP_WIDTH) {
@@ -23,23 +24,23 @@ void read_map(const char *filename, map map)
         }
     }
 
-    close(fd);
+    close(fdd);
 }
 
-void add_position(Coordinates **positions, int *count, int x, int y)
+void add_position(coordinates **positions, int *count, int x, int y)
 {
-    *positions = ft_realloc(*positions, (*count) * sizeof(Coordinates), ((*count) + 1) * sizeof(Coordinates));
+    *positions = ft_realloc(*positions, (*count) * sizeof(coordinates), ((*count) + 1) * sizeof(coordinates));
     (*positions)[*count].x = x;
     (*positions)[*count].y = y;
     (*count)++;
 }
 
-Coordinates *find_free_positions(int *count, map map)
+coordinates *find_free_positions(int *count, map map)
 {
     int x, y;
 
     *count = 0;
-    Coordinates *free_positions = NULL;
+    coordinates *free_positions = NULL;
     y = 0;
     while (y < MAP_HEIGHT) {
         x = 0;
@@ -57,7 +58,7 @@ Coordinates *find_free_positions(int *count, map map)
 
 void place_comestible(comestibles *comestibles,map map) {
     int free_count;
-    Coordinates *free_positions;
+    coordinates *free_positions;
     
 
     free_positions = find_free_positions(&free_count, map);
@@ -71,9 +72,9 @@ void place_comestible(comestibles *comestibles,map map) {
     medir_tiempo(0.1);
     int random_index = custom_rand() % free_count;
 
-    Coordinates new_comestible = free_positions[random_index];
+    coordinates new_comestible = free_positions[random_index];
 
-    comestibles->positions = ft_realloc(comestibles->positions, comestibles->count * sizeof(Coordinates), (comestibles->count + 1) * sizeof(Coordinates));
+    comestibles->positions = ft_realloc(comestibles->positions, comestibles->count * sizeof(coordinates), (comestibles->count + 1) * sizeof(coordinates));
     comestibles->positions[comestibles->count] = new_comestible;
     comestibles->count++;
 
@@ -86,15 +87,11 @@ int ft_sumpuntos(comestibles *comestibles, map map)
         place_comestible(comestibles, map);
         comestibles->count++;
 
-        write(1, "Comestibles placed: ", 20);
-        ft_putnbr(comestibles->count);
-        write(1, "\n", 1);
+        ft_putnbr_fd(comestibles->count, 1);
 
-        write(1, "Current score: ", 15);
-        ft_putnbr(comestibles->count);
-        write(1, "\n", 1);
-
-        sleep(2);
+        ft_putnbr_fd(comestibles->count, 1);
+        medir_tiempo(3.0);
+       
     }
 
     return comestibles->count;

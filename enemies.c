@@ -1,7 +1,9 @@
 #include "so_long.h"
-Coordinates ft_movighost(char **map, int x, int y) {
-    Coordinates new_coords = {x, y};
-    int directions[4][2] = {
+coordinates ft_movighost(char **map, int x, int y)
+{
+    coordinates new_coords = {x, y};
+    int directions[4][2] =
+    {
         {0, 1},  // Derecha
         {1, 0},  // Abajo
         {0, -1}, // Izquierda
@@ -11,7 +13,8 @@ Coordinates ft_movighost(char **map, int x, int y) {
     int moved = 0;
 
     // Intentar moverse en una dirección aleatoria hasta que se logre un movimiento válido
-    while (!moved) {
+    while (!moved)
+    {
          // Simula el paso del tiempo
         medir_tiempo(0.05);
         int rand_index = custom_rand() % 4; // Escoge una dirección aleatoria
@@ -19,7 +22,8 @@ Coordinates ft_movighost(char **map, int x, int y) {
         int new_y = y + directions[rand_index][1];
 
         // Verifica que el nuevo movimiento esté dentro del mapa y no sea una pared
-        if (map[new_x][new_y] == '0') {
+        if (map[new_x][new_y] == '0')
+        {
             new_coords.x = new_x;
             new_coords.y = new_y;
             moved = 1;
@@ -29,16 +33,18 @@ Coordinates ft_movighost(char **map, int x, int y) {
     return new_coords;
 }
 
-int ft_sitpillo(player player, ghost ghost, comestibles comestibles ,double tiempo)
+int ft_sitpillo(player *player, ghost *ghost, double tiempo)
 {
-    ghost.posicion_inicial = ghostpositioni(fd, ghost);
-    if(comestibles.positions == player.position)
+    const char *filename;
+    filename = "map.bert";
+    ghost->posicion_inicial = ghostpositioni(filename, *ghost);
+    if(player->comeme->positions == player->position)
     {
         while(medir_tiempo(3))
         {
-            if(player.position == ghost.position)
+            if(player->position == ghost->position)
             {
-                ghost.position = ghost.posicion_inicial;
+                ghost->position = ghost->posicion_inicial;
                 return 1;
             }
             else
@@ -46,19 +52,25 @@ int ft_sitpillo(player player, ghost ghost, comestibles comestibles ,double tiem
         }
     }
 }
-char ghostpositioni(int fdd, ghost ghost)
+char **ghostpositioni(const char *filename, ghost ghost)
 {
-    char y;
-    char *line;
-    fdd = open(fd, O_RDONLY);
+    int y;
+    int x;
+    char **line;
+    char *read;
+    int fdd;
+    fdd = open(filename, O_RDONLY);
 
-    line = ft_get_next_line(fd);
+    read = ft_get_next_line(fdd);
 
-    while(line = ft_get_next_line(fd) != 'C')
+    while(read != 'C')
     {
-        if(line == 'C')
-            return y;
-        free(line);
+        line[y] = ft_split(read, '\n');
+        x = ft_strlen(line[y]);
+        if(read == 'C')
+            return line[y][x];
+        y++;
+        free(read);
     }
-    return line;
+    return line[x][y];
 }

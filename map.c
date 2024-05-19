@@ -1,13 +1,14 @@
 #include "so_long.h"
 
-int ft_compx(int fdd)
+int ft_compx(const char *filename)
 {
+    int fdd;
     char *line;
-    fdd = open(fd, O_RDONLY);
+    fdd = open(filename, O_RDONLY);
     int longitud;
-    line = ft_get_next_line(fd);
+    line = ft_get_next_line(fdd);
     longitud = ft_strlen(line);
-    while(line = ft_get_next_line(fd) != NULL)
+    while(line  != NULL)
     {
         if(ft_strlen(line) != longitud)
         {
@@ -23,15 +24,16 @@ int ft_compx(int fdd)
 }
 
 
-int ft_county(int fdd)
+int ft_county(const char *filename)
 {
+    int fdd;
     int y;
     char *line;
-    fdd = open(fd, O_RDONLY);
+    fdd = open(filename, O_RDONLY);
 
-    line = ft_get_next_line(fd);
+    line = ft_get_next_line(fdd);
 
-    while(line = ft_get_next_line(fd) != NULL)
+    while(line != NULL)
     {
         y++;
         free(line);
@@ -57,22 +59,24 @@ void free2DArray(map mapa)
 
 }
 
-char **ft_mapa(int fdd, map mapa,int y)
+char **ft_mapa(const char *filename, map mapa,int y)
 {
+    int fdd;
     int i;
     char *line;
-    fdd = open(fd, O_RDONLY);
+    fdd = open(filename, O_RDONLY);
     i  = 0;
-    
-    while(line = ft_get_next_line(fd) != NULL)
+    int x;
+    x = 0;
+    while(line = ft_get_next_line(fdd) != NULL)
     {
         mapa.map = malloc(sizeof(char*) * y);
         while ( i < y)
         {
-            mapa.map[i] = malloc(sizeof(char) * (ft_strlen(line) + 1));
-            mapa.map[i]=ft_strdup(line);
+            mapa.map[i][x] = malloc(sizeof(char) * (ft_strlen(line) + 1));
+            mapa.map[i][x]=ft_strdup(line);
             free(line);
-            i++;
+            x++;
         }
     }
     return mapa.map;

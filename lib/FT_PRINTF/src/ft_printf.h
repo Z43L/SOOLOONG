@@ -6,14 +6,14 @@
 /*   By: davmoren <davmoren@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:30:55 by davmoren          #+#    #+#             */
-/*   Updated: 2024/05/11 19:42:22 by davmoren         ###   ########.fr       */
+/*   Updated: 2024/05/19 21:39:31 by davmoren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "../LIBFT/libft.h"
+# include "../../LIBFT/libft.h"
 # include <stdarg.h>
 #include <stdbool.h>
 

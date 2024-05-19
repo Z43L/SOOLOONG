@@ -1,45 +1,51 @@
-# Makefile for the so_long project
+NAME = so_long
 
-# Compiler and flags
-CC = gcc
-CFLAGS = -Wall -Wextra -Iincludes
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3
 
-# Source files
-SRC = main.c comestibles.c drawujo.c enemies.c game_utils.c game.c map.c player.c
+INCLUDES = -I. -Ilib/LIBFT -Ilib/FT_PRINTF -Ilib/ft_get_next_line -Ilib/minilibx-linux
 
-# Object files
-OBJ = $(SRC:.c=.o)
-LIBFT = lib/LIBFT/libft.a
-LIBMLX = lib/minilibx-linux/libmlx.a
-GNL = lib/ft_et_next_line/get_next_line.o
+LIBFT_DIR = lib/LIBFT
+PRINTF_DIR = lib/FT_PRINTF
+GNL_DIR = lib/ft_get_next_line
+MLX_DIR = lib/minilibx-linux
 
-# Executable name
-EXE = so_long
+SRCS = main.c game.c drawujo.c enemies.c game_utils.c map.c player.c comestibles.c
+OBJS = $(SRCS:.c=.o)
 
-# All target
-all: $(EXE)
+LIBFT = $(LIBFT_DIR)/libft.a
+PRINTF = $(PRINTF_DIR)/libprintf.a
+GNL = $(GNL_DIR)/libgnl.a
+MLX = $(MLX_DIR)/libmlx.a
 
-# Executable target
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -L (lib) -o $@
+all: subsystems $(NAME)
 
-# Library target
-$(LIBFT): $(GNL)
-	$(CC) $(CFLAGS) -c $< -o $@
-$(LIBMLX): $(GNL)
-	$(CC) $(CFLAGS) -c $< -o $@
-$(GNL): $(GNL)
-	$(CC) $(CFLAGS) -c $< -o $@
-	
-
-# Object file targets
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# Clean target
+subsystems:
+	make -C $(LIBFT_DIR)
+	make -C $(PRINTF_DIR)
+	make -C $(GNL_DIR)
+	make -C $(MLX_DIR)
+
+$(NAME): $(OBJS) $(LIBFT) $(PRINTF) $(GNL) $(MLX)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) $(GNL) $(MLX) -o $(NAME) -lm -lbsd -lX11 -lXext -L$(MLX_DIR) -lmlx_Linux
+
 clean:
-	rm -f $(OBJ) $(EXE)
+	make -C $(LIBFT_DIR) clean
+	make -C $(PRINTF_DIR) clean
+	make -C $(GNL_DIR) clean
+	make -C $(MLX_DIR) clean
+	rm -f $(OBJS)
 
-# Run target
-run: all
-	./$(EXE) maps/map.ber
+fclean: clean
+	make -C $(LIBFT_DIR) fclean
+	make -C $(PRINTF_DIR) fclean
+	make -C $(GNL_DIR) fclean
+	make -C $(MLX_DIR) clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re subsystems

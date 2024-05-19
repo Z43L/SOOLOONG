@@ -13,8 +13,9 @@ int ft_iwin(player player, ghost ghost, comestibles comestibles,dramap dramap)
 {
    
     char line;
-    
-    line = ft_buscexit(dramap , fd);
+    const char *filename;
+    filename = "mapa.bert";
+    line = ft_buscexit(dramap , filename);
     if (player.x == line)
     {
         printf("se acabo la partida llegaste al final");
@@ -23,11 +24,12 @@ int ft_iwin(player player, ghost ghost, comestibles comestibles,dramap dramap)
     return 0;
 }
 
-char *ft_buscexit(dramap dramap, int fdd)
+char *ft_buscexit(dramap dramap, const char *filename)
 {
     char exitt;
     char line;
-    fdd = open(fdd, O_RDONLY); 
+    int fdd;
+    fdd = open(filename, O_RDONLY); 
     dramap.P = 'P';
     line = ft_get_next_line(fdd); 
 

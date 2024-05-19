@@ -1,20 +1,19 @@
 #include "so_long.h"
 
-void render_map_while(lienzo lienzo, map mapa) {
+void render_map_while(lienzo *lienzo, map mapa) {
     int y = 0;
     int x = 0;
 
-    while (y < mapa.alto) {
-        while (x < mapa.ancho) {
-            if (mapa.mapa[y][x] == 1) {
-                lienzo.img[0] = "img/wall.png";
-            } else if (mapa.mapa[y][x] == 'E') {
-                lienzo.img[1] = "img/exit.png";
+    while (y < mapa.height) {
+        while (x < mapa.width) {
+            if (mapa.map[y][x] == 1) {
+                lienzo->img = "img/wall.png";
+            } else if (mapa.map[y][x] == 'E') {
+                lienzo->img = "img/exit.png";
             } else {
-                lienzo.img[0] = NULL;
-                lienzo.img[1] = NULL;
+                lienzo->img = NULL;
+                lienzo->img = NULL;
             }
-            // Dibujar la imagen correspondiente en la posición (x, y)
             x++;
         }
         x = 0;
@@ -22,17 +21,17 @@ void render_map_while(lienzo lienzo, map mapa) {
     }
 }
 
-void render_player(lienzo lienzo, player player)
+void render_player(lienzo *lienzo, player player)
 {
-    lienzo.img[2] = "img/player.png";
-    lienzo.x = player.x;
-    lienzo.y = player.y;
+    lienzo->img = "img/player.png";
+    lienzo->player->x = player.x;
+    lienzo->player->y = player.y;
 }
 
-void render_enemy(lienzo lienzo , ghost ghost)
+void render_enemy(lienzo *lienzo , ghost ghost)
 {
-    lienzo.img[3] = "img/ghost.png";
-    lienzo.x = ghost.x;
-    lienzo.y = ghoat.y;
+    lienzo->img = "img/ghost.png";
+    lienzo->ghost->x = ghost.x;
+    lienzo->ghost->y = ghost.y;
 
 }
