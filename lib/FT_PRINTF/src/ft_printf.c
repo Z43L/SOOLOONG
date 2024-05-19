@@ -6,11 +6,11 @@
 /*   By: davmoren <davmoren@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:29:31 by davmoren          #+#    #+#             */
-/*   Updated: 2024/05/12 14:37:55 by davmoren         ###   ########.fr       */
+/*   Updated: 2024/05/19 23:11:44 by davmoren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../LIBFT/libft.h"
+#include "../../LIBFT/libft.h"
 #include "ft_printf.h"
 
 int	ft_putchard(char c)
