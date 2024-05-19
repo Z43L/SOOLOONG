@@ -1,147 +1,151 @@
 #include "so_long.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-char **ft_compiniciales(int fd, map map)
-{
-    // Check if the map file exists
-    if (fd == -1)
-    {
-        return (NULL);
+char **ft_compiniciales(map *map, const char *filename) {
+    int county;
+    int compx;
+    filename = "mapa.bert";
+    printf("Compiniciales: Iniciando...\n");
+
+    compx = ft_compx(filename);
+    printf("Compiniciales: Valor de compx = %d\n", compx);
+    if (compx == 1) {
+        printf("Compiniciales: Error en ft_compx\n");
+        exit(1);
     }
 
-    // Initialize the map
-    map.map = NULL;
-    map.y = 0;
+    county = ft_county(filename);
+    printf("Compiniciales: Valor de county = %d\n", county);
 
-    // Read the map file line by line
-    char *line;
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        // Check if all lines have the same length
-        if (ft_compx("mapa.bert"== 1)
-        {
-            free2DArray(map.map, map.y);
-            free(line);
-            return (NULL);
+    map->map = ft_mapa(*map,county,  filename);
+    if (map->map == NULL) {
+        printf("Compiniciales: Error en ft_mapa\n");
+        exit(1);
+    }
+    map->rows = county; // Asegurarse de que map->rows está correctamente configurado
+    map->y = county;
+    map->x = ft_strlen(map->map[0]); // Asumimos que todas las líneas tienen la misma longitud
+    printf("Compiniciales: Mapa inicializado correctamente\n");
+
+    return map->map;
+}
+
+
+void ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo) {
+    printf("InitGame: Iniciando...\n");
+
+    // Inicializar MiniLibX
+    lienzo->mlx = mlx_init();
+    if (lienzo->mlx == NULL) {
+        printf("InitGame: Error en mlx_init\n");
+        exit(1);
+    }
+    printf("InitGame: mlx inicializado correctamente\n");
+
+    // Crear una nueva ventana con tamaño fijo
+    int window_width = 800; // Ancho fijo de la ventana
+    int window_height = 600; // Alto fijo de la ventana
+    lienzo->mlx_win = mlx_new_window(lienzo->mlx, window_width, window_height, "PACMAN");
+    if (lienzo->mlx_win == NULL) {
+        printf("InitGame: Error en mlx_new_window\n");
+        exit(1);
+    }
+    printf("InitGame: Ventana creada correctamente (width=%d, height=%d)\n", window_width, window_height);
+
+    // Renderizar el mapa, los enemigos y el jugador
+    render_map_while(lienzo, *map);
+    render_enemy(lienzo, *ghost);
+    render_player(lienzo, *player);
+
+    printf("InitGame: Juego inicializado correctamente\n");
+}
+
+
+int ft_startrun(player *player, ghost *ghost, map *map, comestibles *comestibles) {
+    printf("StartRun: Iniciando...\n");
+    int pillada;
+    ft_moviplay(*map, *player, player->x, player->y);
+    ghostpositioni(*ghost);
+    ft_movighost(map->map, ghost->x, ghost->y);
+    ft_sitpillo(player, ghost, comestibles);
+    pillada = ft_simpilla(*ghost, *player, *map);
+    return pillada;
+}
+
+int main(void) {
+    printf("Main: Iniciando programa...\n");
+
+    // Inicialización del jugador
+    player player = {
+        .pos = {0, 0},
+        .win_pos = {0, 0},
+        .moving = 0,
+        .next = NULL,
+        .sprites = {NULL, NULL, NULL, NULL} // Añade las imágenes del jugador aquí
+    };
+
+    // Inicialización del fantasma
+    ghost ghost = {
+        .pos = {0, 0},
+        .win_pos = {0, 0},
+        .moving = 0,
+        .next = NULL,
+        .sprite = NULL // Añade la imagen del fantasma aquí
+    };
+
+    // Inicialización del mapa
+    map map = {
+        .x = 24, // tamaño inicial basado en el mapa proporcionado
+        .y = 20, // tamaño inicial basado en el mapa proporcionado
+        .map = NULL
+    };
+
+    // Inicialización del lienzo
+    lienzo lienzo = {
+        .mlx = NULL,
+        .mlx_win = NULL,
+        .img_width = SIZE, // Tamaño de imagen actualizado
+        .img_height = SIZE, // Tamaño de imagen actualizado
+        .map = map,
+        .player = &player,
+        .ghost = &ghost
+    };
+
+    // Inicializar el mapa
+    char *filename = "mapa.bert";
+    lienzo.map.map = ft_compiniciales(&lienzo.map, filename);
+    if (lienzo.map.map == NULL) {
+        perror("Error al inicializar el mapa");
+        return 1;
+    }
+
+    // Inicializar el juego
+    ft_initgame(&player, &ghost, &lienzo.map, &lienzo);
+
+    // Renderizar el juego
+    render_map_while(&lienzo, lienzo.map);
+    ft_redraw_player(&lienzo);
+    ft_redraw_ghost(&lienzo);
+
+    // Inicia el bucle de eventos de MiniLibX
+    printf("Main: Iniciando bucle de eventos de MiniLibX...\n");
+    mlx_loop(lienzo.mlx);
+
+    // Liberar memoria antes de salir
+    printf("Main: Liberando memoria...\n");
+    if (player.position != NULL) free(player.position);
+    if (ghost.position != NULL) free(ghost.position);
+    if (lienzo.map.map != NULL) {
+        int i = 0;
+        while (i < lienzo.map.y) {
+            if (lienzo.map.map[i] != NULL)
+                free(lienzo.map.map[i]);
+            i++;
         }
-
-        // Copy the line into the map
-        map.map = ft_map(map.map, line, map.y);
-
-        // Increment the number of rows
-        map.y++;
-
-        // Free the line
-        free(line);
+        free(lienzo.map.map);
     }
 
-    // Close the map file
-    close(fd);
-
-    // Return the map
-    return (map.map);
-}
-
-void	*new_window(void *mlx, int width, int height, char *title)
-{
-	void	*win;
-
-	win = mlx_new_window(mlx, width, height, title);
-	return (win);
-}
-
-int ft_initgame(player player, ghost ghost, map map)
-{
-    // Initialize the graphical interface
-    void *mlx = mlx_init();
-    void *win = new_window(mlx, 640, 480, "So Long");
-
-    // Render the map
-    render_map_while(map, mlx, win);
-
-    // Render the player and the enemy
-    render_player(player, mlx, win);
-    render_enemy(ghost, mlx, win);
-
-    // Return the position of the enemy and the ghost
-    return (ghost.x, ghost.y);
-}
-
-int ft_startrun(player player, ghost ghost, map map)
-{
-    // Start the player's movement
-    ft_moviplay(map, player.key);
-
-    // Start the ghost's movement
-    ghost = ft_movienemy(map, ghost);
-
-    // Check if the player has eaten a power pellet
-    if (ft_sitpilla(player, ghost, map.comestibles, 30))
-    {
-        // The player becomes the hunter for 30 seconds
-        player.is_hunter = 1;
-    }
-
-    // Check if the player and the ghost are in the same position
-    if (player.x == ghost.x && player.y == ghost.y)
-    {
-        // If the player is the hunter, reset the ghost's position
-        if (player.is_hunter)
-        {
-            ghost = ft_ghostposition(map);
-        }
-        // Otherwise, the player loses the game
-        else
-        {
-            return (0); // Game over
-        }
-    }
-
-    // Check if the ghost has eaten the player
-    if (ghost.x == player.x && ghost.y == player.y)
-    {
-        return (0); // Game over
-    }
-
-    // Return 1 if the game is still running
-    return (1);
-}
-
-
-int main()
-{
-    // Initialize the game variables
-    player player;
-    ghost ghost;
-    map map;
-    // Load the map
-    int fd = open("map.ber", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error opening map file");
-        return EXIT_FAILURE;
-    }
-    map.map = ft_compiniciales(fd, map);
-    if (map.map == NULL)
-    {
-        perror("Error loading map");
-        return EXIT_FAILURE;
-    }
-    // Initialize the game
-    if (ft_initgame(player, ghost, map) == 0)
-    {
-        perror("Error initializing game");
-        return EXIT_FAILURE;
-    }
-    // Start the game loop
-    while (ft_startrun(player, ghost, map))
-    {
-        // Update the game state
-        // ...
-        // Render the game
-        // ...
-    }
-    // Clean up
-    free2DArray(map.map, map.y);
-    close(fd);
-    return EXIT_SUCCESS;
+    printf("Main: Memoria liberada y finalizando...\n");
+    return 0;
 }
