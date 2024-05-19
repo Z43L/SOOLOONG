@@ -1,28 +1,19 @@
-NAME = libftprintf.a
+# lib/FT_PRINTF/Makefile
+NAME = libprintf.a
 
-CC = gcc
-CFLAGS = -g3 -Wall -Werror -Wextra
-INCLUDES = -I libft -I src
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-SRC = src/*.c
-OBJ = $(SRC:.c=.o)
-LIBFT = libft/libft.a
-LIBFT_H = libft/libft.h
-FT_PRINTF_H = src/ft_printf.h
+SRCS = src/ft_printf.c src/ft_putnbrd_base.c
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
-	ar rcs $@ $^
-
-$(OBJ): $(SRC) $(LIBFT_H) $(FT_PRINTF_H)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(LIBFT):
-	make -C libft
+$(NAME): $(OBJS)
+	ar rcs $(NAME) $(OBJS)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
