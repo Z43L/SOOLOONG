@@ -32,7 +32,7 @@ char **ft_compiniciales(map *map, const char *filename) {
 }
 
 
-int ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo) {
+int ft_initgame(  map *map, lienzo *lienzo) {
     ft_printf("InitGame: Iniciando...\n");
 
     // Inicializar MiniLibX
@@ -43,9 +43,9 @@ int ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo) {
     }
     ft_printf("InitGame: mlx inicializado correctamente\n");
 
-    // Crear una nueva ventana con tamaño fijo
-    int window_width = 800; // Ancho fijo de la ventana
-    int window_height = 600; // Alto fijo de la ventana
+    // Crear una nueva ventana basada en el tamaño del mapa
+    int window_width = map->width * TILE_SIZE;
+    int window_height = map->height * TILE_SIZE;
     lienzo->mlx_win = mlx_new_window(lienzo->mlx, window_width, window_height, "PACMAN");
     if (lienzo->mlx_win == NULL) {
         ft_printf("InitGame: Error en mlx_new_window\n");
@@ -53,15 +53,33 @@ int ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo) {
     }
     ft_printf("InitGame: Ventana creada correctamente (width=%d, height=%d)\n", window_width, window_height);
 
-    // Renderizar el mapa, los enemigos y el jugador
-    render_map_while(lienzo, *map);
-    render_enemy(lienzo, *ghost);
-    render_player(lienzo, *player);
+    
+    // Cargar los sprites (esto es un ejemplo, debes adaptarlo a cómo los cargas tú)
+    lienzo->map.wall_sprite = mlx_xpm_file_to_image(lienzo->mlx, "resource/pacman-art/pared.xpm", &lienzo->img_width, &lienzo->img_height);
+    if (lienzo->map.wall_sprite == NULL) {
+        ft_printf("InitGame: Error cargando wall.xpm\n");
+        exit(1);
+    }
+    lienzo->map.floor_sprite = mlx_xpm_file_to_image(lienzo->mlx, "resource/pacman-art/camino.xpm", &lienzo->img_width, &lienzo->img_height);
+    if (lienzo->map.floor_sprite == NULL) {
+        ft_printf("InitGame: Error cargando floor.xpm\n");
+        exit(1);
+    }
+    lienzo->player->sprites[0] = mlx_xpm_file_to_image(lienzo->mlx, "resource/pacman-art/1.xpm", &lienzo->img_width, &lienzo->img_height);
+    if (lienzo->player->sprites[0] == NULL) {
+        ft_printf("InitGame: Error cargando player.xpm\n");
+        exit(1);
+    }
+    
 
+    // Pintar el mapa
+    draw_map(lienzo);
+
+    // Mantener la ventana abierta
+    mlx_loop(lienzo->mlx);
     ft_printf("InitGame: Juego inicializado correctamente\n");
     return 0;
 }
-
 
 int ft_startrun(player *player, ghost *ghost, map *map) {
     char *filename;
@@ -119,18 +137,15 @@ int main(void) {
         perror("Error al inicializar el mapa");
         return 1;
     }
+    else
+        ft_printf("todo correcto");
 
-    int inicio = ft_initgame(&player, &ghost, &lienzo.map, &lienzo);
-    while ( inicio != 0)
-    {
-        render_map_while(&lienzo, lienzo.map);
-        render_player(&lienzo, player);
-        render_enemy(&lienzo, ghost);
-    }
+    ft_initgame( &lienzo.map, &lienzo);
+    
     
 
     ft_printf("Main: Iniciando bucle de eventos de MiniLibX...\n");
-    mlx_loop(lienzo.mlx);
+    
 
     ft_printf("Main: Liberando memoria...\n");
     if (player.position != NULL) free(player.position);

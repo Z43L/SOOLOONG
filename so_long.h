@@ -11,6 +11,7 @@
 #define MAP_WIDTH 24
 #define MAP_HEIGHT 20
 #define SIZE 8
+#define TILE_SIZE 32
 
 typedef struct t_mapa map;
 typedef struct t_player player;
@@ -63,6 +64,10 @@ struct t_mapa {
     coordinates *position;
     coordinates pos;
     coordinates win_pos;
+    void *wall_sprite;
+    void *floor_sprite;
+    void *exit_sprite;
+    void *collectible_sprite;
 };
 
 struct t_drawmap {
@@ -108,6 +113,7 @@ struct t_lienzo {
     map map;
     player *player;
     ghost *ghost;
+
 };
 
 
@@ -129,7 +135,7 @@ void render_enemy(lienzo *lienzo , ghost ghost);
 int ft_simpilla(ghost ghost, player player);
 int ft_moviplay(map *map, int x , int y);
 int renderr_game(lienzo *lienzo, map mapa, player player, ghost ghost);
-int ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo);
+int ft_initgame( map *map, lienzo *lienzo);
 int ft_startrun(player *player, ghost *ghost, map *map);
-
+void draw_map(lienzo *lienzo);
 #endif
