@@ -1,22 +1,22 @@
 #include "so_long.h"
 
-int ft_simpilla(ghost ghost, player player, map mapaa)
+int ft_simpilla(ghost ghost, player player)
 {
-    if(ghost.x == mapaa.map && player.x == mapaa.map 
-        || ghost.y == mapaa.map && player.y == mapaa.map)
+    if(ghost.x == player.x  && ghost.y == player.y )
         return 1;
     else
         return 0;
 }
 
-int ft_iwin(player player, ghost ghost, comestibles comestibles,dramap dramap)
+int ft_iwin(player player,dramap dramap)
 {
-   
-    char line;
+    int longitud;
+    char *line;
     const char *filename;
     filename = "mapa.bert";
     line = ft_buscexit(dramap , filename);
-    if (player.x == line)
+    longitud = ft_strlen(line - 1);
+    if (player.x == line[longitud])
     {
         printf("se acabo la partida llegaste al final");
         return 1;
@@ -26,16 +26,17 @@ int ft_iwin(player player, ghost ghost, comestibles comestibles,dramap dramap)
 
 char *ft_buscexit(dramap dramap, const char *filename)
 {
-    char exitt;
-    char line;
+
+    char *line;
     int fdd;
+    int longitud;
     fdd = open(filename, O_RDONLY); 
     dramap.P = 'P';
     line = ft_get_next_line(fdd); 
-
-    while((line = ft_get_next_line(fdd)) != dramap.P) 
+    longitud = ft_strlen(line );
+    while(line[longitud]  != dramap.P) 
     {
-        if (line = dramap.P)
+        if (line[longitud] == dramap.P)
         {
             return line;
         }

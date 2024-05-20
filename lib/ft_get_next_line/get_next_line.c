@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#define BUFFER_SIZE 1
+
 
 
 
@@ -23,7 +23,7 @@ char	*bulogic(int fd, char *storage, char *temp, char *buffer)
 	while (!ft_strchrg(storage, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
+		if (bytes_read > 0)
 		{
 			free(storage);
 			return (NULL);
@@ -58,6 +58,7 @@ char	*extract_line(char *str)
 	char	*line;
 	int		i;
 
+	i=0;
 	while (str[i] && str[i] != '\n')
 		i++;
 	if (str[i] == '\n')
@@ -84,9 +85,7 @@ char	*update(char *str)
 {
 	char	*nextline;
 	char	*updated_str;
-	int		i;
-
-	i = 0;
+	
 	nextline = ft_strchrg(str, '\n');
 	if (!nextline || !ft_strchrg(str + 1, '\0'))
 	{
@@ -118,9 +117,9 @@ char	*ft_get_next_line(int fd)
 	static char	*storage;
 	char		*line;
 	char		buffer[BUFFER_SIZE + 1];
-	ssize_t		bytes_read;
 	char		*temp;
 
+	temp = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!storage)

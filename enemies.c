@@ -37,40 +37,53 @@ int ft_sitpillo(player *player, ghost *ghost, double tiempo)
 {
     const char *filename;
     filename = "map.bert";
-    ghost->posicion_inicial = ghostpositioni(filename, *ghost);
+    coordinates initial_position = ghostpositioni(filename);
+    ghost->posicion_inicial->x = initial_position.x;
+    ghost->posicion_inicial->y = initial_position.y;
     if(player->comeme->positions == player->position)
     {
-        while(medir_tiempo(3))
+        while(medir_tiempo(tiempo))
         {
             if(player->position == ghost->position)
             {
-                ghost->position = ghost->posicion_inicial;
+                ghost->position->x = ghost->posicion_inicial->x;
+                ghost->position->y = ghost->posicion_inicial->y;
+
                 return 1;
             }
             else
                 return 0;
         }
     }
+    return 0;
 }
-char **ghostpositioni(const char *filename, ghost ghost)
+coordinates ghostpositioni(const char *filename)
 {
-    int y;
-    int x;
-    char **line;
+    int y = 0;
     char *read;
-    int fdd;
-    fdd = open(filename, O_RDONLY);
+    int fdd = open(filename, O_RDONLY);
+    coordinates pos = {0, 0};
 
-    read = ft_get_next_line(fdd);
+    if (fdd < 0) {
+        perror("Error opening file");
+        return pos;
+    }
 
-    while(read != 'C')
+    while ((read = ft_get_next_line(fdd)) != NULL)
     {
-        line[y] = ft_split(read, '\n');
-        x = ft_strlen(line[y]);
-        if(read == 'C')
-            return line[y][x];
+        char **line = ft_split(read, '\n');
+        for (int x = 0; line && line[x]; x++) {
+            if (line[x][0] == 'C') {
+                pos.x = x;
+                pos.y = y;
+                free(read);
+                return pos;
+            }
+        }
         y++;
         free(read);
     }
-    return line[x][y];
+
+    close(fdd);
+    return pos;
 }

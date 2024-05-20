@@ -5,7 +5,7 @@ int ft_compx(const char *filename)
     int fdd;
     char *line;
     fdd = open(filename, O_RDONLY);
-    int longitud;
+    size_t longitud;
     line = ft_get_next_line(fdd);
     longitud = ft_strlen(line);
     while(line  != NULL)
@@ -21,6 +21,7 @@ int ft_compx(const char *filename)
             return 0;
         }
     }
+    return 0;
 }
 
 
@@ -48,7 +49,7 @@ void free2DArray(map mapa)
     i=0;
     if(mapa.map  == NULL)
     {
-        return NULL;
+        return ;
     }
     while(mapa.rows > i)
     {
@@ -68,13 +69,14 @@ char **ft_mapa(const char *filename, map mapa,int y)
     i  = 0;
     int x;
     x = 0;
-    while(line = ft_get_next_line(fdd) != NULL)
+    line = ft_get_next_line(fdd);
+    while(line != NULL)
     {
         mapa.map = malloc(sizeof(char*) * y);
         while ( i < y)
         {
-            mapa.map[i][x] = malloc(sizeof(char) * (ft_strlen(line) + 1));
-            mapa.map[i][x]=ft_strdup(line);
+            mapa.map[i] = malloc(sizeof(char) * (ft_strlen(line) + 1));
+            mapa.map[i]=ft_strdup(line);
             free(line);
             x++;
         }

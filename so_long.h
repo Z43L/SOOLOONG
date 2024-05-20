@@ -21,8 +21,12 @@ typedef struct t_gosht ghost;
 typedef struct t_coodinates coordinates;
 typedef struct t_keys keys;
 
+struct t_coodinates {
+    int x;
+    int y;
+};
 
-struct t_keys{
+struct t_keys {
     char a;
     char s;
     char w;
@@ -30,44 +34,38 @@ struct t_keys{
     char q;
 };
 
-struct t_gosht{
+struct t_gosht {
     int x;
     int y;
     int vida;
     int moving;
     map *mapa;
-    char  posicion_inicial;
-    coordinates* position;
-    struct s_ghost *next;
+    struct t_gosht *next; // Updated to use t_gosht to match the typedef
+    coordinates *posicion_inicial;
+    coordinates *position;
     void *sprite;
-    coordinates *pos;
-    coordinates *win_pos;
+    coordinates pos[2];
+    coordinates win_pos[2];
 };
 
-struct t_coodinates{
-
-    int x;
-    int y;
-};
-
-struct t_mapa{
+struct t_mapa {
     char **map;
     char *line;
-    int   x;
-    int   y;
-    int   height;
-    int   width;
+    int x;
+    int y;
+    int height;
+    int width;
     player *player;
     ghost *ghost;
     comestibles *comestibles;
     int rows;
     int wall;
-    coordinates* position;
+    coordinates *position;
     coordinates pos;
     coordinates win_pos;
 };
 
-struct t_drawmap{
+struct t_drawmap {
     char P;
     char E;
     char C;
@@ -75,31 +73,29 @@ struct t_drawmap{
     int uno;
 };
 
-
-struct t_player{
+struct t_player {
     int x;
     int y;
     int vida;
     int moving;
-    struct s_player *next;
+    struct t_player *next;
     void *sprites[4];
-    coordinates *pos;
-    coordinates *win_pos;
+    coordinates pos[2];
+    coordinates win_pos[2];
     keys keys;
     map *map;
     comestibles *comeme;
-    coordinates* position;
+    coordinates *position;
 };
 
-struct t_comestibles{
-    coordinates* positions;
+struct t_comestibles {
+    coordinates *positions;
     int x;
     int y;
     int count;
 };
 
-struct t_lienzo
-{
+struct t_lienzo {
     void *mlx;
     void *mlx_win;
     void *win;
@@ -112,7 +108,6 @@ struct t_lienzo
     map map;
     player *player;
     ghost *ghost;
-
 };
 
 
@@ -125,16 +120,16 @@ double calcular_frecuencia_cpu();
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void free2DArray(map mapa);
 char **ft_mapa(const char *filename, map mapa,int y);
-char **ghostpositioni(const char *filename, ghost ghost);
+coordinates ghostpositioni(const char *filename);
 int ft_sitpillo(player *player, ghost *ghost, double tiempo);
 coordinates ft_movighost(char **map, int x, int y); 
 void render_map_while(lienzo *lienzo, map mapa);
 void render_player(lienzo *lienzo, player player);
 void render_enemy(lienzo *lienzo , ghost ghost);
-int ft_simpilla(ghost ghost, player player, map mapaa);
+int ft_simpilla(ghost ghost, player player);
 int ft_moviplay(map *map, int x , int y);
 int renderr_game(lienzo *lienzo, map mapa, player player, ghost ghost);
-void ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo);
-int ft_startrun(player *player, ghost *ghost, map *map, comestibles *comestibles);
+int ft_initgame(player *player, ghost *ghost, map *map, lienzo *lienzo);
+int ft_startrun(player *player, ghost *ghost, map *map);
 
 #endif

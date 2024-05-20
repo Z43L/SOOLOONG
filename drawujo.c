@@ -21,11 +21,12 @@ void render_map_while(lienzo *lienzo, map mapa) {
     }
 }
 
-void render_player(lienzo *lienzo, player player)
+void  render_player(lienzo *lienzo, player player)
 {
     lienzo->img = "img/player.png";
     lienzo->player->x = player.x;
     lienzo->player->y = player.y;
+ 
 }
 
 void render_enemy(lienzo *lienzo , ghost ghost)

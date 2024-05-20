@@ -1,6 +1,5 @@
 #include "so_long.h"
 
-// Generador de números pseudoaleatorios
 int custom_rand() 
 {
     unsigned int rand_seed;
@@ -29,7 +28,6 @@ double calcular_frecuencia_cpu()
 
     start = read_tsc();
 
-    // Esperar un tiempo utilizando un bucle while
     while (tiempo_inicio < 1000000000.0)
     {
         tiempo_inicio += 1.0;
@@ -40,7 +38,6 @@ double calcular_frecuencia_cpu()
     return (end - start) / tiempo_espera;
 }
 
-// Función principal para medir el tiempo en segundos
 double medir_tiempo(double duracion_segundos)
 {
     unsigned long long start, end;
@@ -49,7 +46,6 @@ double medir_tiempo(double duracion_segundos)
 
     start = read_tsc();
 
-    // Esperar un tiempo utilizando un bucle while
     while (tiempo_transcurrido < frecuencia_cpu * duracion_segundos)
     {
         tiempo_transcurrido += 1.0;
@@ -60,27 +56,40 @@ double medir_tiempo(double duracion_segundos)
     return (end - start) / frecuencia_cpu;
 }
 
-void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
-{
+void *ft_realloc(void *ptr, size_t old_size, size_t new_size) {
     void *new_ptr;
     size_t min_size;
 
-    if (!ptr)
+    if (!ptr) 
         return malloc(new_size);
-    if (!new_size)
+    
+
+    if (new_size == 0)
     {
         free(ptr);
         return NULL;
     }
+
     new_ptr = malloc(new_size);
     if (!new_ptr)
         return NULL;
-    min_size = old_size < new_size ? old_size : new_size;
+
+
+    if (old_size < new_size)
+        min_size = old_size;
+    else
+        min_size = new_size;
+
+
     ft_bzero(new_ptr, new_size);
-    while (min_size--)
+
+    while (min_size > 0)
     {
+        min_size--;
         ((unsigned char *)new_ptr)[min_size] = ((unsigned char *)ptr)[min_size];
     }
+
     free(ptr);
+
     return new_ptr;
 }
