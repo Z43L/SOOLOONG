@@ -3,15 +3,22 @@
 #define SO_LONG_H
 
 #include <fcntl.h>
-#include "lib/ft_get_next_line/get_next_line.h"
 #include "lib/LIBFT/libft.h"
+#include "lib/LIBFT/ft_get_next_line/get_next_line.h"
 #include "lib/minilibx-linux/mlx.h"
 #include "lib/FT_PRINTF/src/ft_printf.h"
 
 #define MAP_WIDTH 24
 #define MAP_HEIGHT 20
 #define SIZE 8
-#define TILE_SIZE 32
+#define TILE_SIZE 64
+
+#define KEY_W 13
+#define KEY_A 0
+#define KEY_S 1
+#define KEY_D 2
+#define KEY_ESC 53
+
 
 typedef struct t_mapa map;
 typedef struct t_player player;
@@ -68,6 +75,7 @@ struct t_mapa {
     void *floor_sprite;
     void *exit_sprite;
     void *collectible_sprite;
+    char *filename;
 };
 
 struct t_drawmap {
@@ -98,6 +106,8 @@ struct t_comestibles {
     int x;
     int y;
     int count;
+    void *sprite;
+    void *spritesexit;
 };
 
 struct t_lienzo {
@@ -113,10 +123,10 @@ struct t_lienzo {
     map map;
     player *player;
     ghost *ghost;
-
+    comestibles comestibles;
 };
 
-
+int handle_keypress(int keycode, lienzo *lienzo);
 char *ft_buscexit(dramap dramap, const char *filename);
 int ft_compx(const char *filename);
 int ft_county(const char *filename);
@@ -125,7 +135,7 @@ double medir_tiempo(double duracion_segundos);
 double calcular_frecuencia_cpu();
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void free2DArray(map mapa);
-char **ft_mapa(const char *filename, map mapa,int y);
+char **ft_mapa(const char *filename, map *mapa, int y);
 coordinates ghostpositioni(const char *filename);
 int ft_sitpillo(player *player, ghost *ghost, double tiempo);
 coordinates ft_movighost(char **map, int x, int y); 
@@ -138,4 +148,13 @@ int renderr_game(lienzo *lienzo, map mapa, player player, ghost ghost);
 int ft_initgame( map *map, lienzo *lienzo);
 int ft_startrun(player *player, ghost *ghost, map *map);
 void draw_map(lienzo *lienzo);
+void	ft_draw_floor_wall(lienzo *data);
+void	ft_draw_collect_ghost(lienzo *lienzo);
+void	ft_draw_collect_exit(lienzo *data);
+void	ft_draw_player(lienzo *lienzo);
+int key_hook(int keycode, player *game);
+int move_up(player *game);
+int move_left(player *game);
+int move_down(player *game);
+int move_right(player *game);
 #endif

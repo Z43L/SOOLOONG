@@ -69,7 +69,7 @@ coordinates ghostpositioni(const char *filename)
         return pos;
     }
 
-    while ((read = ft_get_next_line(fdd)) != NULL)
+    while ((read = get_next_line(fdd)) != NULL)
     {
         char **line = ft_split(read, '\n');
         for (int x = 0; line && line[x]; x++) {

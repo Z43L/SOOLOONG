@@ -18,7 +18,7 @@ int ft_iwin(player player,dramap dramap)
     longitud = ft_strlen(line - 1);
     if (player.x == line[longitud])
     {
-        printf("se acabo la partida llegaste al final");
+        ft_printf("se acabo la partida llegaste al final");
         return 1;
     }
     return 0;
@@ -32,7 +32,7 @@ char *ft_buscexit(dramap dramap, const char *filename)
     int longitud;
     fdd = open(filename, O_RDONLY); 
     dramap.P = 'P';
-    line = ft_get_next_line(fdd); 
+    line = get_next_line(fdd); 
     longitud = ft_strlen(line );
     while(line[longitud]  != dramap.P) 
     {

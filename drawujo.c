@@ -1,41 +1,73 @@
 #include "so_long.h"
 
-void draw_sprite(void *mlx, void *mlx_win, void *sprite, int x, int y)
+void	ft_draw_player(lienzo *lienzo)
 {
-    mlx_put_image_to_window(mlx, mlx_win, sprite, x * SIZE, y * SIZE);
+    mlx_put_image_to_window(lienzo->mlx, lienzo->mlx_win,
+        lienzo->player->sprites[0], lienzo->player->y * TILE_SIZE, lienzo->player->x * TILE_SIZE);
+}
+
+void	ft_draw_collect_ghost(lienzo *lienzo)
+{
+    mlx_put_image_to_window(lienzo->mlx, lienzo->mlx_win,
+        lienzo->ghost->sprite, lienzo->ghost->y * TILE_SIZE, lienzo->ghost->x * TILE_SIZE);
 }
 
 
-void draw_map(lienzo *lienzo)
+void	ft_draw_collect_exit(lienzo *data)
 {
-    int y = 0;
-    while (y < lienzo->map.height)
+    int i;
+    int j;
+
+    i = 0;
+
+    printf("\n");
+    while (i <=19)
     {
-        int x = 0;
-        while (x < lienzo->map.width) {
-            char tile = lienzo->map.map[y][x];
-            void *sprite = NULL;
+        j = 0;
 
-            if (tile == '1') {
-                sprite = lienzo->map.wall_sprite;
-            } else if (tile == '0') {
-                sprite = lienzo->map.floor_sprite;
-            } else if (tile == 'P') {
-                sprite = lienzo->player->sprites[0]; // Suponiendo que el primer sprite es el del jugador
-            } else if (tile == 'E') {
-                sprite = lienzo->map.exit_sprite;
-            } else if (tile == 'C') {
-                sprite = lienzo->map.collectible_sprite;
-            }
-
-            if (sprite) {
-                draw_sprite(lienzo->mlx, lienzo->mlx_win, sprite, x, y);
-            }
-            x++;
+        while (data->map.map[i][j] != '\n' && data->map.map[i][j] != '\0')
+        {
+            if (data->map.map[i][j] == 'C')
+                mlx_put_image_to_window(data->mlx, data->mlx_win, 
+                data->map.collectible_sprite, j * TILE_SIZE, i * TILE_SIZE);
+            /* else if (data->map.map[i][j] == 'E')
+                mlx_put_image_to_window(data->mlx, data->mlx_win, 
+                data->map.exit_sprite, j * TILE_SIZE, i * TILE_SIZE); */
+			else if (data->map.map[i][j] == '1')
+                mlx_put_image_to_window(data->mlx, data->mlx_win, 
+                data->map.wall_sprite, j * 64, i * 64);
+            else if (data->map.map[i][j] == 'P')
+                ft_draw_player(data);
+            else if (data->map.map[i][j] == 'E')
+                ft_draw_collect_ghost(data);
+            else
+                mlx_put_image_to_window(data->mlx, data->mlx_win, 
+                data->map.floor_sprite, j * 64, i * 64);
+            j++;
         }
-        y++;
+        i++;
     }
 }
+
+
+/* void	ft_draw_floor_wall(lienzo *data)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (data->map.map[i])
+    {
+        j = 0;
+        while (data->map.map[i][j] != '\0')
+        {
+            
+            j++;
+        }
+        i++;
+    }
+} */
+
 /* 
 void render_map_while(lienzo *lienzo, map map) {
     int y = 0;
